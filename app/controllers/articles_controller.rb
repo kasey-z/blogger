@@ -17,6 +17,12 @@ class ArticlesController < ApplicationController
   def create
     @article=Article.new(article_params)
     @article.save
+    if params[:images]
+            #===== The magic is here ;)
+            params[:images].each { |image|
+              @article.attachments.create(image: image)
+            }
+    end
     flash.notice = "Article '#{@article.title}' Created!"
     redirect_to article_path(@article)
   end
@@ -36,7 +42,12 @@ class ArticlesController < ApplicationController
   def update
     @article = Article.find(params[:id])
     @article.update(article_params)
-
+    if params[:images]
+            #===== The magic is here ;)
+            params[:images].each { |image|
+              @article.attachments.create(image: image)
+            }
+    end
    flash.notice = "Article '#{@article.title}' Updated!"
 
     redirect_to article_path(@article)
